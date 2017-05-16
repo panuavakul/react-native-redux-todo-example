@@ -5,10 +5,16 @@ import {bindActionCreators} from 'redux'
 import { connect } from 'react-redux'
 import { addTodo, toggleTodo } from '../actions/TodoListAction'
 import { Footer, FooterTab, Text, List, Container, Content, ListItem, Header, Title, Button, Left, Right, Body, Icon } from 'native-base'
+import { ListView } from 'react-native';
 import Todo from './Todo'
 
 class TodoList extends Component {
   render () {
+    // Create 
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
+
     return (
       <Container>
 
@@ -25,13 +31,16 @@ class TodoList extends Component {
         </Header>
 
         <Content>
-          <List dataArray={this.props.todos}
-            renderRow={(todo) =>
-              <ListItem>
-                {console.log('TodoList ' + todo.completed)}
-                <Todo id={todo.id} completed={todo.completed} text={todo.text} didToggle={(id) => { this.props.toggleTodo(id) }} />
-              </ListItem>
-            } />
+          { console.log('sdasfas ' + this.props.todos) }
+          { this.props.todos.length > 0
+            ? <ListView dataSource={dataSource.cloneWithRows(this.props.todos)}
+              renderRow={(todo) =>
+                <ListItem>
+                  {console.log('TodoList ' + todo.completed)}
+                  <Todo id={todo.id} completed={todo.completed} text={todo.text} didToggle={(id) => { this.props.toggleTodo(id) }} />
+                </ListItem>
+              } /> : null
+          }
         </Content>
 
         <Footer>
